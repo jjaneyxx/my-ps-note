@@ -159,3 +159,81 @@ https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Unary_p
 3. `v => +v` 에서 v가 문자일 경우, + 덕분에 숫자로 변환됨
 4. 템플릿 리터럴과 개행문자를 사용하면 console.log() 을 한번만 써서 출력 가능함
 
+# 2884.  알람 시계
+
+문제는 맞았지만, 다른 분들 코드를 보다가 감탄한 숏코딩 몇 개가 있어서 정리하려 왔당
+
+``` js
+let input=require('fs').readFileSync('dev/stdin').toString().trim().split` `
+let H=+input[0]
+let M=+input[1]
+console.log(M>44?H:H>0?H-1:23,M+(M>44?-45:15))
+```
+
+**<input 을 H 와 M 에 할당하는 방식> 
+
+**me** 
+``` js
+let [H, M] = input.map((v) => +v); // H, M : 10, 10
+```
+
+input(배열)의 각 요소에 함수 `v => +v` 를 적용한 새로운 배열을 만듬 
+이를 Array destructuring (배열 디스트럭처링) 을 이용해 개별 변수 H, M 에 할당함 
+
+**else** 
+``` js
+let H=+input[0]
+let M=+input[1]
+```
+
+input(배열) 의 첫번째, 두번째 요소를 각각 `+` 연산자를 사용해 숫자로 변환, H 와 M 변수에 할당함
+
+**비교**
+- me : `map` 함수, 배열 디스트럭처링을 이용해 입력값을 숫자로 변환 (배열 이용)
+	- 함수형 프로그래밍 스타일, 확장성과 가독성이 좋음 
+- else : 작은 스크립트, 간단한 상황에서 좋음 
+
+
+**<삼항연산자 vs if-else 조건문>
+
+**me
+```
+if (M < 45) {
+  if (H == 0) {
+    H = 23;
+    M = M + 60 - 45;
+  } else {
+    H = H - 1;
+    M = M + 60 - 45;
+  }
+} else {
+  M = M - 45;
+}
+
+console.log(`${H} ${M}`);```
+
+**else
+```
+
+**else
+```
+console.log(M > 44 ? H : H > 0 ? H - 1 : 23, M + (M > 44 ? -45 : 15));
+```
+
+
+**이참에 정리하는 삼항연산자
+``` js 
+condition ? exprIfTrue : exprIfFalse;
+```
+
+- condition : 조건문
+- exprIfTrue : Truthy (참) 일 때 실행
+- exprIfFalse : Falsy (거짓) 일 때 실행 
+
+- 조건 연산자 라고도 부른다. 
+- if … else 문의 대체재로 빈번히 사용된다. 
+
+**Falsy ?
+```
+null, NaN, 0, 비어있는 문자열(""), undefined
+```
