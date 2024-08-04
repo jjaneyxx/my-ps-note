@@ -414,7 +414,30 @@ let input = require("fs").readFileSync("./input.txt").toString().trim().split("\
 
 윈도우 환경에선느 텍스트 파일이 `\r\n` 으로 줄바꿈을 표현한다고 한다. 이는 다른 운영체제에서 동일한 텍스트 파일을 다룰 때 호환성 문제를 피하기 위해 필요하다고 한다. 
 
+→ **결론** : 숫자로 변환한다면, 따로 캐리지 리턴 문자를 제거해줄 필요가 없다. 
+
 #### 결론
 1. 텍스트 파일이 Window 에서 작성된 경우, **각 줄 끝에 `\r\n` 문자가 항상 붙는다.**
 2. `\r` (캐리지리턴) 문자는 윈도우 환경에서 줄바꿈의 일부분으로 사용된다
 3. 숫자로 변환해도 제거되고, 처음부터 입력을 받을 때 `.map(line => line.trim());` 로 수동으로 제거해줄 수 있다. 
+
+
+# 11021
+
+```js
+let input = require("fs").readFileSync("./input.txt").toString().trim().split("\n");
+
+let T = +input[0];
+
+for (let i = 1; i <= T; i++) {
+  input[i] = input[i].split(" ").map((v) => +v);
+  console.log(`Case #${i}: ${input[i][0] + input[i][1]}`);
+}
+```
+
+- input : 문자열로 이루어진 객체 (배열)
+- `input[0]` 를 제외한 배열 (테스트케이스들) 를 `for문` 에 넣어서 돌리기
+- `for문` 안에서  
+    - `split(' ')` : 문자열 `input[i]` 를 배열로 만들고 `input[i][0]` 와 `input[i][1]` 가 배열의 요소로 분리함
+    - `map((v) => +v)` : 요소를 문자에서 숫자로 만듬
+- 케이스별로 각각 출력
