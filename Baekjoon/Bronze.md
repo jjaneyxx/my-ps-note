@@ -178,7 +178,9 @@ let [H, M] = input.map((v) => +v); // H, M : 10, 10
 ```
 
 input(배열)의 각 요소에 함수 `v => +v` 를 적용한 새로운 배열을 만듬 
+이는 배열의 각 요소를 순자로 변환화는 과정임 
 이를 Array destructuring (배열 디스트럭처링) 을 이용해 개별 변수 H, M 에 할당함 
+
 
 **else** 
 ``` js
@@ -422,7 +424,7 @@ let input = require("fs").readFileSync("./input.txt").toString().trim().split("\
 3. 숫자로 변환해도 제거되고, 처음부터 입력을 받을 때 `.map(line => line.trim());` 로 수동으로 제거해줄 수 있다. 
 
 
-# 11021
+# 11021. A+B-7 
 
 ```js
 let input = require("fs").readFileSync("./input.txt").toString().trim().split("\n");
@@ -441,3 +443,232 @@ for (let i = 1; i <= T; i++) {
     - `split(' ')` : 문자열 `input[i]` 를 배열로 만들고 `input[i][0]` 와 `input[i][1]` 가 배열의 요소로 분리함
     - `map((v) => +v)` : 요소를 문자에서 숫자로 만듬
 - 케이스별로 각각 출력
+
+
+# 10807. 개수 세기
+
+**배열에서 특정 값 세기**
+총 3가지 방법이 있다. 
+
+1. for 반복문 : 배열을 순회하면서 원하는 값이 나올 때마다 count 값을 증가시킴
+2. filter 함수 : 배열에서 특정 조건에 부합하는 값들만을 모아서 새로운 배열로 리턴하는 함수 
+3. reduce 함수 : *우선보류 *
+
+#### filter() 
+
+- 특정 조건에 부합하는 배열의 모든 값을 배열 형태로 리턴함 
+
+``` js
+const arr = ['a', 'b', 'c', 'a'];
+let count = arr.filter(item => 'a' === item).length;
+document.write(count); // 2
+```
+
+``` js
+arr.filter(item => 'a' === item); 
+```
+- filter 함수를 호출, 파라미터로 `element => 'a' === element` 함수를 전달함
+- `element => 'a' === element` (화살표함수)
+  ``` js 
+  function(item){
+	  return 'a' === item
+  }
+	```
+	- filter 함수로 전달된 callback 함수 → **무슨 말인지 ?? **
+
+- **filter 함수의 작동 방식**
+	- 원본 배열 : `['a', 'b', 'c', 'a']`
+	- Callback 함수
+		- filter 함수는 배열의 각 요소에 대해 **실행할 함수** 를 필요로 함
+		- 이 함수는 배열의 각 요소를 받아들이고, 그 요소가 조건을 만족하는지 여부를 `true` 또는  `false` 로 반환함 
+	- filter 함수를 호출 
+		- filter 함수를 호출할 때 이 callback 함수를 전달함.
+		- 이 함수는 원본 배열의 각 요소에 대해 순차적으로 실행되어, 함수가 `true` 를 반환하면 원본 배열의 해당 요소가 새 배열에 포함됨
+	- 최종적으로 → filter 함수가 `true` 를 반환한 요소들로 이루어진 새 배열이 반환됨
+
+![](https://i.imgur.com/VsB36VS.png)
+
+
+# 2562. 최댓값 
+
+``` jsx
+let _ = require("fs")
+  .readFileSync("./input.txt")
+  .toString()
+  .trim()
+  .split("\n")
+  .map((line) => line.trim());
+
+_ = _.map((v) => +v);
+console.log(Math.max(..._));
+console.log(_.indexOf(Math.max(..._)) + 1);
+
+```
+
+#### 핵심 
+
+1. 전개 연산자 (`...`) : 문법 이름 그대로, 객체 혹은 배열들을 펼쳐주는 연산자 
+
+``` js
+// 펼칠 대상이 객체인 경우
+{...obj}
+
+// 펼칠 대상이 배열일 경우
+[...arr]
+{...arr}
+```
+
+- 배열이나 객체 앞에 **점 세 개**를 붙여주고, 펼쳐진 배열/객체를 담을 **바구니** 
+	- 객체는 객체로, 배열은 객체나 배열로 담을 수 있음 
+
+``` js
+Math.max(..._)
+```
+
+- 배열 ( _ ) 를 전개 연산자로 펼치고, `Math.max` 로 최댓값을 찾기
+	- 보통 `Math.max(1,2,3)` 을 하면 3을 리턴 하지만, [1,2,3] 처럼 배열로 들어왔을 때는 **전개 연산자** 를 사용해서 배열을 먼저 펼쳐준 후 → 내장 함수 `Math.max()` 를 사용함
+	- 이는 `Math.min()` 도 마찬가지 
+
+2. `Math.max()`
+	- 전달된 인자들 중 가장 큰 값을 반환함 
+	- 배열을 직접 인자로 받지 않으므로, 위처럼 전개 인산자를 사용해 배열 요소들을 펼침
+
+3. `indexOf()`
+	- 배열.indexOf(주어진 값) → 배열에서 **주어진 값의 첫 번째 인덱스**를 반환함
+	- 값이 배열에 없으면 -1 을 반환함 
+
+
+# 2675. 문자열 반복 
+``` js
+let input = require("fs").readFileSync("./input.txt").toString().trim().split("\n");
+let T = +input[0]; // 테스트케이스 개수
+let answer = "";
+
+// 테스트 케이스 순회
+for (let i = 1; i <= T; i++) {
+  let R = +input[i].split(" ")[0]; // 반복 횟수
+  let S = input[i].split(" ")[1]; // 문자열 -> 배열
+
+  // 문자열 S 를 순회
+  for (let k = 0; k < S.length; k++) {
+    answer += S[k].repeat(R);
+  }
+  answer += "\n";
+}
+
+console.log(answer);
+
+```
+
+#### repeat() 
+
+- 자바스크립트의 문자열 반복 메소드 
+- 특정 문자열을 원하는 만큼 반복하고 싶을 때 사용함 
+
+- 기본형 
+  ``` js
+	string.repeat(count) 
+	```
+	- `string` : 문자열 혹은 문자
+	- `count` : 반복할 횟수 
+
+- 문제에 적용하면
+	- `S` 가 ABC 일 때 → `S[k]` 는 for문을 돌릴 때에 A,B,C가 됨
+	- A를 `R` 만큼 반복해서 answer 에 할당 + B를 `R` 만큼 반복해서 answer 에 할당 + C를 `R` 만큼 반복해서 answer에 할당함 
+	  (answer : AAABBBCCC)
+	- 한꺼번에 답을 answer 에 담고 줄바꿈이 필요한 곳에 줄바꿈 문자를 추가해서 한번에 answer 을 출력함 (출력 초과 때문)
+	  ```
+		AAABBBCCC
+		/////HHHHHTTTTTPPPPP
+		```
+
+<br/> 
+
+
+# 10818. 최소, 최대
+
+## 나의 코드
+
+```js
+let input = require("fs").readFileSync(0).toString().trim().split("\n");
+
+let N = +input[0];
+let arr = input[1].split(" ").map((v) => +v);
+
+console.log(`${Math.min(...arr)} ${Math.max(...arr)}`);
+```
+
+- 보통 `Math.max(1,2,3)` 을 하면 3을 리턴한다. 그러나 [1,2,3] 처럼 배열로 들어왔을 때에는 **전개연산자** 를 사용해서 배열을 먼저 펼쳐준 후에 -> 내장 함수 `Math.max()` 나 `Math.min()` 을 사용할 수 있다.
+- `Math.max()` 와 `Math.min()` 는 전달된인자들 중 가장 큰 값 / 작은 값을 반환하며, 배열을 직접 인자로 받지 않으므로 위처럼 스프레드 연산자를 사용해 배열 요소들을 펼쳐주었다.
+
+  
+
+## 다른 풀이 1
+
+> 모든 정수는 -1,000,000보다 크거나 같고, 1,000,000보다 작거나 같은 정수이다.  
+> → 정수의 범위가 주어질 때는 값을 **범위를 벗어나는 값** 으로 초기화하면 좋다.
+> 
+> - minValue, maxValue 기준을 설정하고 배열을 순회하며 각각 값을 갱신하기
+
+```js
+let n = Number(input[0]); // 이후 만들 배열의 length
+let arr = input[1].split(' ').map(Number); 
+
+/*
+모든 정수는 -1,000,000 보다 크거나 같고,
+1,000,000 보다 작거나 같은 정수이다.
+*/
+
+let minValue = 1000001; // 우선 큰 수로 초기화
+let maxValue = -1000001; // 우선 작은 수로 초기화
+
+for (let i=0; i<n; i++){
+	if(minValue > arr[i]) minValue = arr[i];
+	if(maxValue < arr[i]) maxValue = arr[i]; 
+}
+
+console.log(minValue, maxValue); 
+```
+
+- `map(Number)` : 배열의 각 요소를 숫자 타입으로 변환함
+- `split(' ')` 메서드는 문자열을 **공백 문자를 기준으로 분리하여 배열로** 만듬  
+    - `"1 2 3 4 5 "` →`["1", "2", "3", "4", "5"]`  
+    - 이렇게 만든 배열 요소들은 **문자열 타입**  
+    - 배열 요소들을 숫자로 처리하기 위해 `map(Number)` 을 사용함
+
+### 범위의 설정
+
+- 범위를 벗어나는 값으로 minValue, maxValue 를 설정
+- 최솟값, 최대값을 구해야할 때 주어진 범위에서 벗어나는 값으로 기준을 설정해두기
+
+### 핵심 아이디어
+
+- 현재까지의 가장 작은 값보다 (minValue) 내가 지금 확인한 값 (arr[i]) 이 더 작은 경우에는 minValue 를 갱신
+- 현재까지의 가장 큰 값 보다 (maxValue) 내가 지금 확인한 값 (arr[i]) 이 더 큰 경우에는 maxValue 를 갱신
+
+### 시간 복잡도
+
+- 데이터의 개수 (n) 에 비례하므로 O(n)
+
+  
+
+## 다른 풀이 2
+
+> - reduce, Math.min, Math.max 이용하기
+> - reduce 는 하나의 함수를 받는다.
+> - a 와 b 를 받았을 때 (`(a, b) =>` ) 더 작은 값을 반환하도록 하는 함수(`Math.min(a,b)` ) 를 넣어준다.
+
+```js
+...
+let data = input[1].split(' ').map(Number)
+
+let minValue = data.reduce((a,b) => Math.min(a, b));
+let maxValue = data.reduce((a,b) => Math.max(a, b)); 
+```
+
+💡원소를 두 개씩 계속 반복 비교하기 때문에 O(n) 만큼의 시간 복잡도를 가짐  
+(사실 두 줄이므로 합지면 2O(n) 이 되겠지만, 시간복잡도에서는 2가 제거되어 O(n) 의 시간 복잡도를 가짐)
+
+<br/> 
+
+# 다음 문제 : 2562 
